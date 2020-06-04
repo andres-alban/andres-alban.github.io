@@ -1,7 +1,8 @@
-body {
+/* body {
     margin: 60px auto;
-    width: 70%;
-}
+    width: 90%;
+    background-color: white;
+} */
 nav ul, footer ul {
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
     padding: 0px;
@@ -11,6 +12,7 @@ nav ul, footer ul {
 nav ul li{
     display: inline;
     margin-right: 20px;
+    font-size: 2em;
 }
 a.navlinks {
     text-decoration: none;
@@ -30,11 +32,35 @@ div.info {
 }
 
 div.content {
+    padding-top: 20px;
+    padding-bottom: 20px;
     font-size: 1.5em;
     line-height: 1.4em;
     color: #333;
 }
 footer {
     border-top: 1px solid #d5d5d5;
-    font-size: .8em;
+    font-size: 1em;
 }
+
+.navbar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 0;
+    font-size: 12px;
+  }
+
+  .navbar-nav li a{
+
+  }
+
+  .navbar-nav  li a:hover {
+      text-decoration: underline;
+  }
+
+  .navbar-nav li.active a {
+    color: steelblue !important;
+    background-color: inherit!important;
+  }
