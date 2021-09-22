@@ -1,1 +1,7 @@
 .vscode/
+*.aux
+*.synctex.gz
+*.log
+*.out
+*.bbl
+*.blg
