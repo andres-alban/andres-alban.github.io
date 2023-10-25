@@ -60,7 +60,8 @@ function plot_dynamic(filename,pics=false,on=false) {
     fetch("../Experiments/Exp4/" + filename + "_9.json").then((res)=> res.json()),
     fetch("../Experiments/Exp4/" + filename + "_15.json").then((res)=> res.json())
   ];
-  let names = ["dynamic", "known labeling", "all prog", "all active"]
+  let names = ["dynamic min","dynamic sparser","dynamic less sparse", "known labeling", "all prog", "all active"]
+  let keys = ["dynamic_fEVI_LassoCV_min","dynamic_fEVI_LassoCV_1se","dynamic_fEVI_LassoCV_1se_rev","fEVI","fEVI","fEVI"] 
 
   Promise.all(results).then((ress)=>{
     // console.log(res)
@@ -72,13 +73,13 @@ function plot_dynamic(filename,pics=false,on=false) {
     else metric += "_off";
     metric += "_mean";
     let x = Array(T + !on).fill().map((element, index) => index + on);
-    for (let i=0; i<ress.length; ++i) {
-      let policy;
-      if (i==0) policy = "dynamic_fEVI_power2";
-      else policy = "fEVI";
+    for (let i=0; i<names.length; ++i) {
+      let file;
+      if (i < 3) file = 0;
+      else file = i-2;
       data.push({
         x: x,
-        y: ress[i][policy][metric],
+        y: ress[file][keys[i]][metric],
         name: names[i]
       });
     }
@@ -100,8 +101,8 @@ let exp = document.getElementById("exp");
 let pics = document.getElementById("pics");
 let on = document.getElementById("on");
 function newplot() {
-  if (exp.value == "RI_DiscCov_dynamic") {
-    plot_dynamic("RI_DiscCov", pics.checked, on.checked);
+  if (exp.value.endsWith("_dynamic")) {
+    plot_dynamic(exp.value.slice(0,exp.value.length-8), pics.checked, on.checked);
   }
   else {
     plot_fixed_label(exp.value, pics.checked, on.checked);
