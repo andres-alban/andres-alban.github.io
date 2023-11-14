@@ -27,7 +27,7 @@ function plot_fixed_label(filename,pics=false,on=false) {
     let data = [];
     let T = res["T"];
     let metric = pics ? "PICS" : "EOC";
-    if (on) metric += "_on";
+    if (on) metric = "cumul" + metric + "_on";
     else metric += "_off";
     metric += "_mean";
     let x = Array(T + !on).fill().map((element, index) => index + on);
@@ -43,6 +43,8 @@ function plot_fixed_label(filename,pics=false,on=false) {
 
     layout["title"] = {text: filename};
     layout["yaxis"]["title"] = {text: metric};
+    if (on) layout["yaxis"]["type"] = "linear";
+    else layout["yaxis"]["type"] = "log";
     config["toImageButtonOptions"]["filename"] = filename;
     Plotly.newPlot(
       div, 
@@ -69,7 +71,7 @@ function plot_dynamic(filename,pics=false,on=false) {
     let data = [];
     let T = res["T"];
     let metric = pics ? "PICS" : "EOC";
-    if (on) metric += "_on";
+    if (on) metric = "cumul" + metric +"_on";
     else metric += "_off";
     metric += "_mean";
     let x = Array(T + !on).fill().map((element, index) => index + on);
@@ -87,6 +89,8 @@ function plot_dynamic(filename,pics=false,on=false) {
 
     layout["title"] = {text: "fEVI: dynamic vs. different labelings"};
     layout["yaxis"]["title"] = {text: metric};
+    if (on) layout["yaxis"]["type"] = "linear";
+    else layout["yaxis"]["type"] = "log";
     config["toImageButtonOptions"]["filename"] = filename + "_dynamic";
     Plotly.newPlot(
       div, 
