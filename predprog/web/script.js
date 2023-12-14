@@ -10,33 +10,41 @@ let config = {editable: false,
   // staticPlot: true,
   // displayModeBar: "auto",
   displaylogo:false,
-  modeBarButtonsToRemove:["zoom2d","select2d","lasso2d"],
+  modeBarButtonsToRemove:["select2d","lasso2d"],
   toImageButtonOptions: {
     format: 'png', // one of png, svg, jpeg, webp
     scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
   }
 };
 
-const exclude_fields = ["T","delay","reps","SampleSize"];
 function plot_fixed_label(filename,pics=false,on=false) {
-  fetch("../Experiments/Exp4/" + filename + ".json")
+  fetch("../Experiments/Exp5/" + filename + ".json")
   .then((res)=> res.json())
   .then((res)=>{
     // console.log(res)
 
     let data = [];
-    let T = res["T"];
+    let T = res["parameters"]["T"];
     let metric = pics ? "PICS" : "EOC";
     if (on) metric = "cumul" + metric + "_on";
     else metric += "_off";
-    metric += "_mean";
     let x = Array(T + !on).fill().map((element, index) => index + on);
-    for (let key in res) {
-      if (exclude_fields.includes(key)) continue;
+    res = res["results"];
+    for (let policy in res) {
+      let se = res[policy][metric]["std"]
+      for (let i=0; i<se.length; ++i)
+        se[i] /= Math.sqrt(res[policy][metric]["n"][i])
       data.push({
         x: x,
-        y: res[key][metric],
-        name: key
+        y: res[policy][metric]["mean"],
+        error_y:{
+          type: "data",
+          array: se,
+          visible: true,
+          opacity: 0.2,
+          width: 0
+        },
+        name: policy
       });
     }
     data.sort((a,b)=> b.y[b.y.length-1] - a.y[a.y.length-1]);
@@ -57,32 +65,40 @@ function plot_fixed_label(filename,pics=false,on=false) {
 
 function plot_dynamic(filename,pics=false,on=false) {
   let results = [
-    fetch("../Experiments/Exp4/" + filename + "_dynamic.json").then((res)=> res.json()),
-    fetch("../Experiments/Exp4/" + filename + "_1.json").then((res)=> res.json()),
-    fetch("../Experiments/Exp4/" + filename + "_9.json").then((res)=> res.json()),
-    fetch("../Experiments/Exp4/" + filename + "_15.json").then((res)=> res.json())
+    fetch("../Experiments/Exp5/" + filename + "_dynamic.json").then((res)=> res.json()),
+    fetch("../Experiments/Exp5/" + filename + "_1.json").then((res)=> res.json()),
+    fetch("../Experiments/Exp5/" + filename + "_9.json").then((res)=> res.json()),
+    fetch("../Experiments/Exp5/" + filename + "_15.json").then((res)=> res.json())
   ];
   let names = ["dynamic min","dynamic sparser","dynamic less sparse", "known labeling", "all prog", "all active"]
   let keys = ["dynamic_fEVI_LassoCV_min","dynamic_fEVI_LassoCV_1se","dynamic_fEVI_LassoCV_1se_rev","fEVI","fEVI","fEVI"] 
 
   Promise.all(results).then((ress)=>{
-    // console.log(res)
-    let res = ress[1];
     let data = [];
-    let T = res["T"];
+    let T = ress[0]["parameters"]["T"];
     let metric = pics ? "PICS" : "EOC";
-    if (on) metric = "cumul" + metric +"_on";
+    if (on) metric = "cumul" + metric + "_on";
     else metric += "_off";
-    metric += "_mean";
     let x = Array(T + !on).fill().map((element, index) => index + on);
     for (let i=0; i<names.length; ++i) {
       let file;
       if (i < 3) file = 0;
       else file = i-2;
+      let res = ress[file]["results"][keys[i]][metric];
+      let se = res["std"]
+      for (let i=0; i<se.length; ++i)
+        se[i] /= Math.sqrt(res["n"][i])
       data.push({
         x: x,
-        y: ress[file][keys[i]][metric],
-        name: names[i]
+        y: res["mean"],
+        name: names[i],
+        error_y:{
+          type: "data",
+          array: se,
+          visible: true,
+          opacity: 0.2,
+          width: 0
+        },
       });
     }
     data.sort((a,b)=> b.y[b.y.length-1] - a.y[a.y.length-1]);

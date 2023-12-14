@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>evi</title>
+  <link rel="icon" href="data:;base64,=">
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js" charset="utf-8"></script>
+</head>
+<body>
+  <div id="plot" style="width:600px;height:400px;">
+  </div>
+  <select name="exp" id="exp">
+    <option>RI_DiscCov_1</option>
+    <option>RI_DiscCov_9</option>
+    <option>RI_DiscCov_15</option>
+    <option>RI_DiscCov_dynamic</option>
+    <option>FI_DiscCov_1</option>
+    <option>FI_DiscCov_9</option>
+    <option>FI_DiscCov_15</option>
+    <option>FI_DiscCov_dynamic</option>
+    <option>RI_ContCov_1</option>
+    <option>RI_ContCov_1_finer</option>
+    <option>Lipkovich</option>
+  </select>
+  <label for="on">On?</label>
+  <input id="on" type="checkbox">
+  <label for="pics">PICS?</label>
+  <input id="pics" type="checkbox">
+  <img id="jpg-export"></img>
+  <script src="script_old.js" type="module"></script>
+</body>
+</html>
