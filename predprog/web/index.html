@@ -4,12 +4,19 @@
   <meta charset="utf-8">
   <title>evi</title>
   <link rel="icon" href="data:;base64,=">
-  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js" charset="utf-8" crossorigin="anonymous"></script>
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js" charset="utf-8"></script>
+  <style>
+    p {
+      margin-bottom: -10px;
+    }
+  </style>
 </head>
 <body>
   <div id="plot" style="width:600px;height:400px;">
   </div>
   <select name="exp" id="exp">
+    <option value=Lipkovich_0.5>Lipkovich</option>
+    <option>Hu_experiment</option>
     <option>RI_DiscCov_1</option>
     <option>RI_DiscCov_9</option>
     <option>RI_DiscCov_15</option>
@@ -19,15 +26,29 @@
     <option>FI_DiscCov_15</option>
     <option>FI_DiscCov_dynamic</option>
     <option>RI_ContCov_1</option>
-    <option>Lipkovich_0.1</option>
-    <option>Lipkovich_0.5</option>
-    <option>Lipkovich_1</option>
-    <option>Hu_experiment</option>
+    <option>RI_DiscCov_1_delay_combined</option>
+    <option>RI_DiscCov_1_MC</option>
+    <option>RI_DiscCov_1_RandEpsilon</option>
   </select>
   <label for="on">On?</label>
   <input id="on" type="checkbox">
   <label for="pics">PICS?</label>
   <input id="pics" type="checkbox">
+  <div>
+    <p>
+      Lipkovich has all policies for the Lipkovich application. Hu_experiment
+      is the simple experiment suggested by reviewer Hu
+    </p>
+    <p>
+      Some guidelines for understanding the naming convention of the plots for
+      the MARS application
+    </p>
+    <p>RI = Random Instance</p>
+    <p>DiscCov = Discrete Covariates</p>
+    <p>ContCov = Continuous Covariates</p>
+    <p>1=known labeling; 9=allprog; 15 = allpred; dynamic = dynamic labeling</p>
+    <p>Example: RI_DiscCov_9 refers to the random instance setting with Discrete Covariates and the allprog labeling</p>
+  </div>
   <img id="jpg-export"></img>
   <script src="script.js" type="module"></script>
 </body>
