@@ -1,0 +1,835 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="jeamer">
+  <meta name="author" content="Alban Chick Zoumpoulis ">
+  <meta name="dcterms.date" content="22 Oct. 2024">
+  <title> Pred Prog Trials</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4/dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4/dist/reveal.css">
+  <link rel="stylesheet" href="fs.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<div style="display: none">
+\[
+\newcommand{bm}[1]{#1}
+\newcommand{\allocation}{allocation policy}
+\newcommand{\Allocation}{Allocation policy}
+\newcommand{\allocations}{allocation policies}
+\newcommand{\Allocations}{Allocation policies}
+\newcommand{\strategy}{treatment strategy}
+\newcommand{\Strategy}{Treatment strategy}
+\newcommand{\strategies}{treatment strategies}
+\newcommand{\Strategies}{Treatment strategies}
+\newcommand{\implementation}{implementation policy}
+\newcommand{\Implementation}{Implementation policy}
+\newcommand{\implementations}{implementation policies}
+\newcommand{\Implementations}{Implementation policies}
+\newcommand{\response}{response function}
+\newcommand{\responses}{response functions}
+\newcommand{\Response}{Response function}
+\newcommand{\Responses}{Response functions}
+\newcommand{\mdash}{\,---\,}
+
+\newcommand{\E}{\mathbb{E}}
+\renewcommand{\Pr}{\mathbb{P}}
+\newcommand{\Prprime}{\mathcal{P}}
+\newcommand{\Eprime}{\mathcal{E}}
+\newcommand{\Var}{\mathbb{V}}
+\newcommand{\Covariance}{\text{Cov}}
+\newcommand{\Normal}{\mathcal{N}}
+\newcommand{\kron}{\otimes}
+\newcommand{\interact}{\odot}
+\newcommand{\indic}[1]{\mathbb{1}_{#1}}
+\newcommand{\diag}{\text{diag}}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\eigen}{\text{eigen}}
+\newcommand{\permset}{\textup{Perm}}
+\newcommand{\permgen}{\textup{perm}}
+\newcommand{\defined}{:=}
+
+\def\argmax{\mathop{\rm arg\,max}}%
+\def\argmin{\mathop{\rm arg\,min}}%
+
+\newcommand{\eye}[1]{I_{#1}}
+\newcommand{\ones}[1]{\mathbf{1}_{#1}}
+\newcommand{\unitvec}[1]{\mathbf{e}_{#1}}
+\newcommand{\zerovec}[1]{\mathbf{0}_{#1}}
+\newcommand{\onematrix}[1]{\mathbf{L}_{#1}}
+
+\newcommand{\D}{\fadopt{}}
+\newcommand{\on}{\textup{on}}
+\newcommand{\off}{\textup{off}}
+\newcommand{\delay}{\Delta}
+\newcommand{\delayprime}[1]{\delay^{\prime}_{#1}}
+
+\newcommand{\pred}{\alpha}
+\newcommand{\prog}{\beta}
+\newcommand{\comb}{\c}
+
+\newcommand{\av}{\mathbf{a}}
+\newcommand{\bv}{\mathbf{b}}
+\newcommand{\cv}{\mathbf{c}}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathscr{F}}
+\newcommand{\G}{\mathscr{G}}
+
+\newcommand{\Yset}{\mathscr{Y}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\Yt}[1]{Y_{#1}}
+\newcommand{\Yvec}[2]{\mathbf{Y}_{(#1):(#2)}}
+\newcommand{\Ygen}{y}
+\newcommand{\Ypost}{\tilde{\Y}}
+\newcommand{\Ypostt}[1]{\tilde{Y}_{#1}}
+\newcommand{\Ypostgen}{\tilde{\Ygen}}
+\newcommand{\Ygivenr}{F_{Y \mid r}}
+\newcommand{\Zvec}[2]{\mathbf{Z}_{(#1):(#2)}}
+
+\newcommand{\Xset}{\mathscr{X}}
+\newcommand{\Xdim}{m}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Xt}[1]{\mathbf{X}_{#1}}
+\newcommand{\Xmat}[2]{\mathbf{X}_{(#1):(#2)}}
+\newcommand{\Xgen}{\mathbf{x}}
+\newcommand{\Xgenelem}[1]{x_{#1}}
+\newcommand{\Xcdf}{F_{x}}
+\newcommand{\Xpost}{\tilde{\mathbf{X}}}
+\newcommand{\Xpostt}[1]{\tilde{\mathbf{X}}_{#1}}
+\newcommand{\Xpostgen}{\tilde{\Xgen}}
+\newcommand{\Xpostcdf}{F_{\tilde{x}}}
+\newcommand{\Xf}[1]{\mathbf{X}_{#1}}
+
+\newcommand{\Xpredset}{\mathscr{X}_{\pred}}
+\newcommand{\Xpreddim}{m_{\pred}}
+\newcommand{\Xpred}{\X_{\pred}}
+\newcommand{\Xpredt}[1]{\mathbf{X}_{\pred,#1}}
+\newcommand{\Xpredgen}{\Xgen_{\pred}}
+\newcommand{\Xpredpost}{\tilde{\X}_{\pred}}
+\newcommand{\Xpredpostt}[1]{\tilde{\mathbf{X}}_{\pred,#1}}
+\newcommand{\Xpredpostgen}{\tilde{\Xgen}_{\pred}}
+
+\newcommand{\Xprogset}{\mathscr{X}_\prog}
+\newcommand{\Xprogdim}{m_{\prog}}
+\newcommand{\Xprog}{\X_{\prog}}
+\newcommand{\Xprogt}[1]{\mathbf{X}_{\prog,#1}}
+\newcommand{\Xproggen}{\Xgen_{\prog}}
+\newcommand{\Xprogpost}{\tilde{\X}_{\prog}}
+\newcommand{\Xprogpostt}[1]{\tilde{\mathbf{X}}_{\prog,#1}}
+\newcommand{\Xprogpostgen}{\tilde{\Xgen}_{\prog}}
+
+\newcommand{\Wset}{\mathscr{W}}
+\newcommand{\Wdim}{n}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\Wt}[1]{W_{#1}}
+\newcommand{\Wvec}[2]{\mathbf{W}_{(#1):(#2)}}
+\newcommand{\Wpost}{\tilde{\W}}
+\newcommand{\Wpostt}[1]{\tilde{W}_{#1}}
+\newcommand{\Wgen}{w}
+\newcommand{\Wpostgen}{\tilde{\Wgen}}
+\newcommand{\Wf}[1]{\mathbf{W}_{#1}}
+
+\newcommand{\Cov}{\X_{\comb}}
+\newcommand{\Covt}[1]{\X_{\comb,#1}}
+\newcommand{\Covgen}{\Xgen_{\comb}}
+\newcommand{\Covdist}{\X_{\comb}}
+\newcommand{\Covdim}{m_{\comb}}
+\newcommand{\Covpost}{\tilde{\X}_{\comb}}
+\newcommand{\Covpostt}[1]{\tilde{\X}_{\comb,#1}}
+
+\newcommand{\Xsim}[2]{\hat{\mathbf{X}}_{#1:#2}}
+\newcommand{\xsimgen}{\hat{\mathbf{x}}}
+\newcommand{\Xsimsingle}[1]{\hat{\mathbf{X}}_{#1}}
+\newcommand{\predsdsim}[1]{\hat{\bm{\sigma}}^{(#1)}}
+\newcommand{\predsdsimplain}{\hat{\bm{\sigma}}}
+\newcommand{\csim}[2]{\hat{\bm{\theta}}_{#1}^{(#2)}}
+\newcommand{\Vsim}[2]{\hat{V}_{#1}^{(#2)}}
+\newcommand{\nusim}[1]{\hat{\nu}^{(#1)}}
+\newcommand{\Zsim}{\hat{\mathbf{Z}}}
+
+\newcommand{\Ydist}{Y}
+\newcommand{\Xdist}{X}
+\newcommand{\Wdist}{W}
+\newcommand{\Kdist}{K}
+\newcommand{\Xpreddist}{\Xdist_{\pred}}
+\newcommand{\Xprogdist}{\Xdist_{\prog}}
+\newcommand{\Xpostdist}{\tilde{\Xdist}}
+\newcommand{\Xpredpostdist}{\Xpostdist_{\pred}}
+\newcommand{\Xprogpostdist}{\Xpostdist_{\prog}}
+\newcommand{\cdist}{\theta}
+\newcommand{\Ycdf}{F_{Y}}
+\newcommand{\YcdfmidcXW}{F_{\Ydist\mid \cdist,\Xdist,\Wgen}}
+\newcommand{\YcdfmidKXW}{F_{\Ydist\mid\Kgen,\Xdist,\Wgen}}
+\newcommand{\YcdfmidKXf}{F_{\Ydist\mid\Kgen,\Xdist,\f(\Xdist)}}
+\newcommand{\YXcdfmidKf}{F_{\Ydist,\Xdist\mid\Kgen,\f}}
+
+\renewcommand{\r}{r}
+\newcommand{\rset}{\mathscr{R}}
+\newcommand{\respfnt}[1]{\r_{\cfull}(\Xt{#1},\Wt{#1})}
+\newcommand{\respfnpostt}[1]{\r_{\cfull}(\Xpostt{#1},\Wpostt{#1})}
+\newcommand{\respfn}[1]{\r_{#1}(\Xgen,\Wgen)}
+
+
+\renewcommand{\a}{\bm{\mu}_{\pred}}
+\newcommand{\at}[1]{\bm{\theta}_{\pred,#1}}
+\newcommand{\agen}{\bm{\theta}_{\pred}}
+\newcommand{\aset}{\Theta_{\pred}}
+\newcommand{\aelem}[1]{\mu_{\pred,#1}}
+\renewcommand{\b}{\bm{\mu}_{\prog}}
+\newcommand{\bt}[1]{\bm{\theta}_{\prog,#1}}
+\newcommand{\bgen}{\bm{\theta}_{\prog}}
+\newcommand{\bset}{\Theta_{\prog}}
+\newcommand{\belem}[1]{\mu_{\prog,#1}}
+\renewcommand{\c}{\bm{\mu}}
+\newcommand{\celem}[1]{\mu_{#1}}
+\newcommand{\ct}[1]{\bm{\theta}_{#1}}
+\newcommand{\ctelem}[1]{\theta_{#1}}
+\newcommand{\cgen}{\bm{\theta}}
+\newcommand{\cgenwiggle}{\hat{\cgen}}
+\newcommand{\cgenelem}[1]{\theta_{#1}}
+\newcommand{\cset}{\Theta}
+\newcommand{\cfull}{\bm{\mu}}
+\newcommand{\cfullelem}[1]{\mu_{#1}}
+\newcommand{\cfullcdf}{F_{\mu}}
+
+\newcommand{\lab}{\bm{\xi}}
+\newcommand{\labelem}[1]{\xi_{#1}}
+\newcommand{\labfun}[1]{\bm{xi}(#1)}
+\newcommand{\labgen}{\zeta}
+\newcommand{\labset}{\Xi}
+\newcommand{\predictive}{\textup{pred}}
+\newcommand{\prognostic}{\textup{prog}}
+\newcommand{\idle}{\textup{idle}}
+
+\newcommand{\Ht}[1]{\mathbf{H}_{#1}}
+\newcommand{\Hgen}{\mathbf{h}}
+\newcommand{\Kset}{\mathscr{K}}
+\newcommand{\Ksett}[1]{\mathscr{K}_{#1}}
+\newcommand{\K}{\mathbf{K}}
+\newcommand{\Kt}[1]{\K_{#1}}
+\newcommand{\Kgen}{\mathbf{k}}
+\newcommand{\Kup}{\tau_{k}}
+\newcommand{\pipe}{\mathbf{J}}
+\newcommand{\pipet}[1]{\pipe_{#1}}
+\newcommand{\pipetelem}[2]{J_{#1,#2}}
+\newcommand{\pipegen}{\mathbf{j}}
+\newcommand{\pipegenelem}[1]{j_{#1}}
+\newcommand{\pipeupt}[1]{\tau_{j,#1}}
+\newcommand{\pipeupone}{\tau_{j}^{1}}
+\newcommand{\pipeuptwo}{\tau_{j}^{2}}
+\newcommand{\pipeupthree}{\tau_{j}^{3}}
+\newcommand{\upt}[1]{\tau_{#1}}
+
+\newcommand{\actionset}{\mathcal{A}}
+\newcommand{\arm}{arm}
+\newcommand{\arms}{arms}
+\newcommand{\DP}{DP}
+
+\newcommand{\Pop}{P}
+\newcommand{\pathoriz}{H}
+
+\newcommand{\fset}{\mathbf{f}}
+\newcommand{\f}{f}
+\newcommand{\fpost}{\hat{\f}}
+\newcommand{\ft}[1]{\f_{#1}}
+\newcommand{\fpi}{\f^\pi}
+\newcommand{\fpit}[1]{\ft{#1}^\pi}
+\newcommand{\fpolt}[2]{\ft{#2}^{#1}}
+\newcommand{\fadop}{\tilde{\f}}
+\newcommand{\fadopt}[1]{\tilde{\f}_{#1}}
+\newcommand{\foracle}{\f^*}
+\newcommand{\predsd}{\tilde{\bm{\sigma}}}
+\newcommand{\EVI}{\textup{EVI}}
+\newcommand{\BATTLEalloc}{BATTLE*}
+\newcommand{\BCalloc}{BC*}
+\newcommand{\fEVI}{\textup{$f$EVI}}
+\newcommand{\fEVIblind}{\textup{$f$EVIblind}}
+\newcommand{\MCEVInaive}{\textup{\fEVI-MC-simple}}
+\newcommand{\MCEVIh}{\textup{\fEVI-MC}}
+\newcommand{\randEVI}{\textup{\fEVI-rand}}
+\newcommand{\randMCEVI}{\textup{\MCEVIh-rand}}
+
+\newcommand{\EOC}{\textup{EOC}}
+\newcommand{\PICS}{\textup{PICS}}
+
+\newcommand{\nature}{\textup{nat}}
+\]
+</div>
+
+<section class="title-slide" style="height: 100%;">
+  <div style="display: flex; flex-direction:column; justify-content: center; height: 100%; text-align: center;">
+    <h1 class="title-slide-title">Learning Personalized Treatment Strategies with Predictive and Prognostic Covariates</h1>
+  <div class="title-slide-authorlist">
+    <div class="title-slide-author">Andres Alban¹</div>
+    <div class="title-slide-author">Stephen E. Chick²</div>
+    <div class="title-slide-author">Spyros I. Zoumpoulis²</div>
+  </div>
+  <div class="title-slide-institutelist">
+    <div class="title-slide-institute">¹Frankfurt School of Finance &amp; Management</div>
+    <div class="title-slide-institute">²INSEAD</div>
+  </div>
+    <div class="title-slide-event">INFORMS Annual Meeting</div>
+    <div class="title-slide-date">22 Oct. 2024</div>
+  </div>
+</section>
+
+
+
+<div data-title="Motivation"></div>
+<section>
+  <h1>Precision medicine</h1>
+  <ul class="itemize">
+    <li> Usual approach in medicine: </li>
+  </ul>
+  <div style="width: 810px; height: 60px; position: relative; margin:0 auto">
+    <div class="centered filled" style="position: absolute; left: 10px; top: 10px; width:300px; height: 40px;">
+      Medical condition
+    </div>
+    <div class="centered filled" style="position: absolute; left: 500px; top: 10px; width:300px; height: 40px;">
+      Treatment
+    </div>
+    <svg width="100%" height="100%">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color1)"></path>
+        </marker>
+      </defs>
+      <line x1="310" y1="30" x2="500" ,="" y2="30" stroke="var(--color1)" marker-end="url(#arrow)"></line>
+    </svg>
+  </div>
+  <ul>
+    <li class="fragment" data-fragment-index="1">
+      Precision medicine: tailor treatment to individual characteristics
+    </li>
+  </ul>
+  <div class="fragment" data-fragment-index="1" style="width: 810px; height: 300px; position: relative; margin:0 auto">
+    <div class="centered filled" style="position: absolute; left: 10px; top: 130px; width:300px; height: 40px;">
+      Medical condition
+    </div>
+    <div class="centered filled" style="position: absolute; left: 500px; top: 130px; width:300px; height: 40px;">
+      Treatment strategy
+    </div>
+    <div class="fragment centered filled" data-fragment-index="2" style="position: absolute; left: 500px; top: 10px; width:300px; height: 80px;">
+      Patient covariates (biomarkers)
+    </div>
+    <div class="fragment centered filled" data-fragment-index="2" style="position: absolute; left: 500px; top: 250px; width:300px; height: 40px;">
+      Treatment
+    </div>
+    <svg width="100%" height="100%">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color1)"></path>
+        </marker>
+      </defs>
+      <line x1="310" y1="150" x2="500" ,="" y2="150" stroke="var(--color1)" marker-end="url(#arrow)"></line>
+      <line class="fragment" data-fragment-index="2" x1="650" y1="90" x2="650" ,="" y2="130" stroke="var(--color1)" marker-end="url(#arrow)"></line>
+      <line class="fragment" data-fragment-index="2" x1="650" y1="170" x2="650" ,="" y2="250" stroke="var(--color1)" marker-end="url(#arrow)"></line>
+    </svg>
+  </div>
+</section>
+
+
+
+<section>
+  <h1>Sepsis and its treatment</h1>
+<div style="display:flex; gap:3%">
+<div class="column" style="width:55%">
+      <ul>
+        <li>
+          Life-threatening organ dysfunction caused by a dysregulated host response to infection <a data-citep="true" data-cite="Singer2016" class="citation-intext" href="#/bibliography">(Singer et al., 2016)</a>
+
+          <ul>
+            <li>A leading cause of in-hospital mortality </li>
+            <li> Over $20 billion (5.2%) of total US hospital costs in 2011 </li>
+          </ul>
+        </li>
+        <li class="fragment" data-fragment-index="2">
+          Surviving Sepsis Campaign guidelines for treatment <a data-citep="true" data-cite="Rhodes2017" class="citation-intext" href="#/bibliography">(Rhodes et al., 2017)</a>
+
+          <ul>
+            <li> Antimicrobial therapy </li>
+            <li> Organ support </li>
+            <li> <b>Intravenous fluids</b> </li>
+            <li> … </li>
+          </ul>
+        </li>
+      </ul>
+
+</div>
+<div class="column" style="width:45%">
+      <img src="ICU.jpg">
+      <img class="fragment" data-fragment-index="2" src="SSC.png">
+
+</div>
+
+</div>
+</section>
+
+<section>
+  <h1>Personalizing Fluid Management in Sepsis Patients</h1>
+<div style="display:flex; gap:3%">
+<div class="column" style="width:50%">
+  <img class="centerimg" style="width: 70%" src="logistic_regression_mars.jpg">
+
+</div>
+<div class="column" style="width:50%">
+  <img style="width: 50%" src="logo-amsterdamumc.svg">
+  <p> Mars consortium </p>
+  <ul>
+    <li> Four blood transcriptomic endotypes defined as Mars1, 2, 3, 4 </li>
+    <li> FFB: First fluid balance as a proxy for treatment
+  </li></ul>
+
+</div>
+
+</div>
+  <ul>
+    <li>Logistic regression
+      <ul>
+        <li> Dependent variable: Death in ICU </li>
+        <li> Independent variables: interaction of MARS endotype and FFB (treatment) </li>
+        <li> Control variable: APACHE IV score (severity of disease) </li>
+      </ul>
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h1>This paper</h1>
+  <p> Patient covariates </p>
+  <ul>
+    <li>
+      Predictive: interact with the treatment
+      <ul>
+        <li> E.g., MARS endotypes </li>
+      </ul>
+    </li>
+    <li>
+      Prognostic: affect outcome without interacting with the treatment
+      <ul>
+        <li> Age, comorbidities, APACHE score </li>
+      </ul>
+    </li>
+  </ul>
+  <p class="fragment big" style="margin-top: 50px;"> This paper: design of a sequential clinical trial in order to find the best treatment strategy in the presence of predictive and prognostic covariates </p>
+</section>
+
+<section>
+  <h1>Related literature and contribution</h1>
+
+  <ul class="small fragment semi-fade-out" data-fragment-index="3">
+    <li>
+      Covariates and clinical trials
+      <ul>
+        <li>Subgroup selection in biostatistics <a data-citep="true" data-cite="Foster2011,Lipkovich2017" class="citation-intext" href="#/bibliography">(Foster et al., 2011; Lipkovich et al., 2017)</a>
+</li>
+        <li> Trial design for balancing prognostic covariates across treatment groups <a data-citep="true" data-cite="Pocock1975,bertsimas2019covariate,Bhat2017" class="citation-intext" href="#/bibliography">(Pocock &amp; Simon, 1975; Bertsimas et al., 2019; Bhat et al., 2020)</a>
+ </li>
+        <li> Trial design for precision medicine: BATTLE <a data-citep="true" data-cite="Zhou2008" class="citation-intext" href="#/bibliography">(Zhou et al., 2008)</a>
+, I-SPY 2 <a data-citep="true" data-cite="barker2009spy,berry2011optadaptonc" class="citation-intext" href="#/bibliography">(Barker et al., 2009; Berry, 2011)</a>
+, ... </li>
+      </ul>
+    </li>
+    <li class="fragment" data-fragment-index="2">
+      Sampling to learn the best alternative
+      <ul>
+        <li> R&amp;S <a data-citep="true" data-cite="Kim2006, gao2019selecting,xiong2020personalized,li2020context" class="citation-intext" href="#/bibliography">(Kim &amp; Nelson, 2006; Gao et al., 2019; Xiong, 2020; Li et al., 2020)</a>
+ </li>
+        <li> Contextual bandits <a data-citep="true" data-cite="Goldenshluger2013,Russo2014learningposterior,Villar2018,Bastani2020" class="citation-intext" href="#/bibliography">(Goldenshluger &amp; Zeevi, 2013; Russo &amp; Van Roy, 2014; Villar &amp; Rosenberger, 2018; Bastani &amp; Bayati, 2020)</a>
+ </li>
+        <li> EVI/KG in Bayesian optimization <a data-citep="true" data-cite="Chick2001,Frazier2008,powell2012optimal,pearce2017efficient,Zhang2019" class="citation-intext" href="#/bibliography">(Chick &amp; Inoue, 2001; Frazier et al., 2008; Powell &amp; Ryzhov, 2012; Pearce &amp; Branke, 2017; Ding et al., 2021)</a>
+ </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="fragment small" data-fragment-index="3">
+    Literature on adaptive contextual learning has not yet studied models with
+    <ol>
+      <li> both predictive and prognostic covariates<span>, as well as learning which covariates are predictive and prognostic</span></li>
+      <li> with offline rewards <span>and online rewards</span> </li>
+      <li> and delayed observations </li>
+    </ol>
+  </div>
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<div data-title="Model"></div>
+<section>
+  <h1>Model of sequential trial with covariates</h1>
+  <ul class="fragment semi-fade-out">
+    <li> Patients \(t=1,2, \ldots, T\) enrolled sequentially </li>
+    <li> Trial manager observes patient with covariates \( \Xt{t}\in\Xset\subseteq\R^{\Xdim} \), assignes to her treatment \( \Wt{t}\in\Wset=\{1,2,\ldots,\Wdim\} \). Outcome \( \Yt{t}\in\Yset\subseteq\R \) observed after delay \( \delay \) </li>
+    <li> History \( \Ht{t} \) represents all available data at time \( t \) </li>
+    <li>
+      <em>Allocation decision</em> \( (\pi_{t})_{t = 1,2,\ldots,T}: (\Xt{t},\Ht{t-1}) \to \Wt{t} \)
+    </li>
+    <li>
+      At time \( T+\delay \) trial manager picks the <em>treatment strategy</em> for post-trial patients:
+      \(
+        \fadopt{}(\Xgen) = \argmax_{\Wpostgen\in\Wset}\E[\r_{\cfull}(\Xgen,\Wpostgen) \mid \Ht{T+\delay}]
+      \)
+    </li>
+  </ul>
+  <img class="centerimg" style="width: 80%; margin-top: 30px;" src="trial_timeline.svg">
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<section>
+  <h1>Model of sequential trial with covariates</h1>
+  <ul>
+    <li>
+      Linear response function \( \respfnt{t}= \E[\Yt{t}\mid \cfull,\Xt{t},\Wt{t}] \):
+    </li>
+  </ul>
+  <div style="position: relative;">
+    <div class="fragment fade-out" data-fragment-index="1" style="position: absolute; width: 100%; top: -1em;">
+      \begin{align*}
+        \respfn{\cfull} &amp;= \celem{0,0}+\sum_{i=1}^{\Wdim}\underbrace{\indic{\Wgen=i}\celem{i,0}}_{\text{treatment effect}}+\sum_{l=1}^{\Xdim}\underbrace{\Xgenelem{l} \celem{0,l}}_{\text{prognostic term}}+\sum_{i=1}^{\Wdim}\sum_{l=1}^{\Xdim}\underbrace{\indic{\Wgen=i}\Xgenelem{l}\celem{i,l}}_{\text{predictive term}}
+      \end{align*}
+    </div>
+    <div class="fragment" data-fragment-index="1" style="position: relative;">
+      \begin{align*}
+        \respfn{\cfull} &amp;= \celem{0,0}{\labelem{0,0}}+\sum_{i=1}^{\Wdim}\underbrace{\indic{\Wgen=i}\celem{i,0}}_{\text{treatment effect}}{\cdot \labelem{i,0}}+\sum_{l=1}^{\Xdim}\underbrace{\Xgenelem{l} \celem{0,l}}_{\text{prognostic term}}{\cdot \labelem{0,l}}+\sum_{i=1}^{\Wdim}\sum_{l=1}^{\Xdim}\underbrace{\indic{\Wgen=i}\Xgenelem{l}\celem{i,l}}_{\text{predictive term}}{\cdot \labelem{i,l}}\\ 
+        &amp;=(\Xgen\kron\Wgen)\c
+      \end{align*}
+      Labeling \( \lab \): if label \( \labelem{i,l}=0 \), then \( \cfullelem{i,l}=0 \); if \( \labelem{i,l}=1 \), then \( \cfullelem{i,l} \) is potentially active
+    </div>
+  </div>
+  <div class="fragment" data-fragment-index="2">
+    <ul>
+      <li>
+        Bayesian linear regression to learn coefficients:
+      </li>
+    </ul>
+    \begin{align*}
+      \Yt{t}\mid \c,\Xt{t},\Wt{t}&amp;\overset{\mathrm{i.i.d.}}{\sim}\Normal((\Wt{t}\kron \Xt{t}) \c, \sigma^{2})\\
+      \c&amp;\sim \Normal(\ct{0},\Sigma_{0})
+    \end{align*}
+  </div>
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<section>
+<section>
+  <h1> Summary of theory </h1>
+  <ul>
+    <li class="fragment"> Optimal policy is solvable through dynamic programming (but generally computationally infeasible) </li>
+    <li class="fragment">
+      We extend Expected Value of Information (EVI) methods to develop the <b><i>f</i>EVI policy</b> to maximize offline rewards
+      and the <b><i>f</i>EVI<sup>on</sup> policy</b> to maximize online rewards
+    </li>
+    <li class="fragment">
+      We prove the one-step look-ahead and asymptotic optimality of <i>f</i>EVI
+    </li>
+    <li class="fragment">
+      We develop a heuristic based on the Lasso technique to adaptively infer the labeling
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h1>Trial value and optimal policy</h1>
+  <ul>
+    <li>
+      At time \( t=T+\delay \) the trial concludes; post-trial patient with covariates \( \Xpostt{i} \) receives treatment \( \Wpostt{i} \) and obtains health outcome \( \Ypostt{i} \)
+    </li>
+    <li>
+      <i>Trial value</i> with allocation policy \( \pi \) (offline rewards):
+      \(
+        V^{\pi}= \E^{\pi}\left[\r_{\cfull}(\Xpostt{1},\fadopt{}(\Xpostt{1})) \right]
+      \)
+    </li>
+    <li>
+      Optimal value to go:
+        \begin{aligned}
+          V_{t}(\Kgen)&amp;= \sup_{\pi_{t+1}}\E^{\pi_{t+1}}[ V_{t+1}(\upt{t+1}(\Kgen,\Xt{t+1},\Wt{t+1},\Yt{t-\delay+1})) \mid \Kt{t}=\Kgen], \text{ for}~ t = 0,\ldots,T-1 \\
+          V_{T}(\Kgen)&amp;= \E[\max_{\Wpostgen}(\Wpostgen \kron \Xpostt{1})\ct{T+\delay}\mid \Kt{T}=\Kgen] .
+        \end{aligned}
+    </li>
+  </ul>
+<div class="theorem-container">
+  <div class="theorem-header"> Proposition </div>
+  <div class="theorem-content"> The DP satisfies \( V_{0}(\Kt{0})=\sup_{\pi\in\Pi}{V^\pi} \). There exists a deterministic Markov allocation policy \( \pi^{*} \), which can be computed using Bellman's recursion, that solves \( \max_{\pi\in\Pi}V^{\pi} \). </div>
+</div>
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<div data-title="Algorithms"></div>
+<section>
+  <h1>EVI heuristics for learning with predictive and prognostic covariates</h1>
+  <ul>
+    <li> EVI: Expected Value of Information </li>
+    <li> <i>f</i>EVI: makes sampling decision that maximizes EVI of one more sample
+      <ul>
+        <li>
+          Extends EVI/KG approach of Bayesian optimization <a data-citep="true" data-cite="Frazier2008, Chick2001" class="citation-intext" href="#/bibliography">(Frazier et al., 2008; Chick &amp; Inoue, 2001)</a>
+ to pred/prog covariates
+        </li>
+        <li>
+          Assigns the treatment with the highest <i>f</i>EVI index:
+          \begin{align*}
+            \nu_{t}(\Xgen,\Wgen)&amp;= \underbrace{\E\Big[\max_{\Wpostgen\in\Wset}(\Wpostgen \kron \Xpostt{1}) \ct{t+\delay+1} \mid \Ht{t},\Xt{t+1}=\Xgen,\Wt{t+1}=\Wgen\Big]}_{\text{implement after one more patient and pipeline clears}}\\
+            &amp;- \underbrace{\E\Big[\max_{\Wpostgen\in\Wset}(\Wpostgen \kron \Xpostt{1}) \ct{t+\delay} \mid \Ht{t}\Big]}_{\text{implement after pipeline clears}}
+          \end{align*}
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<div data-title="Analysis"></div>
+<section>
+  <h1>Theoretical properties of the <i>f</i>EVI policy</h1>
+<div class="theorem-container">
+  <div class="theorem-header"> Proposition : <span class="theorem-name">One-step look-ahead optimality</span> </div>
+  <div class="theorem-content"> For sample size \( T=1 \) <i>f</i>EVI is optimal. </div>
+</div>
+  <div style="height: 20px"></div>
+<div class="theorem-container">
+  <div class="theorem-header"> Theorem </div>
+  <div class="theorem-content"> If an allocation policy samples the treatment with the highest <i>f</i>EVI index with probability bounded away from 0, then it is asymptotically optimal. </div>
+</div>
+
+  <div class="small" style="margin-top: 10px">
+  Usual techniques for this proof: show each treatment is sampled infinitely often. Not sufficient in our setting.<br>Key steps of proof:<br>
+  <ul>
+    <li> For any policy, posterior parameters \( \ct{t} \) and \( \Sigma_{t} \) converge </li>
+    <li> For a policy sampling the largest <i>f</i>EVI treatment with \( &gt;0 \) probability: if it did not reach a state with no value in further sampling, the posterior parameters would not converge </li>
+    <li> A policy that reaches a state with no value in further sampling is asymptotically optimal </li>
+  </ul>
+
+  Conclusion: <i>f</i>EVI is optimal for small and large sample sizes
+  </div>
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<section>
+  <h1> Online <i>f</i>EVI policy
+</h1></section>
+</section>
+
+<div data-title="Numerical Experiments"></div>
+<section id="experiments">
+  <h1>Simulation experiment for a sepsis trial</h1>
+  Motivating example: sepsis management
+<div style="display:flex; gap:3%">
+<div class="column" style="width:60%">
+    <ul>
+      <li>Outcome: change in SOFA score (from admission to + 7 days) </li>
+      <li>
+        Patient covariates:
+        <ul>
+          <li> MARS endotypes </li>
+          <li> APACHE score (severity of illness) </li>
+        </ul>
+      </li>
+      <li>
+        8 treatments: fluid management (restrictive or liberal), tighter glucose control (no or yes), and hydrocortisone dose (low or high)
+      </li>
+      
+      
+    </ul>
+
+</div>
+<div class="column" style="width:40%">
+      <img class="centerimg" src="ICU.jpg">
+
+</div>
+
+</div>
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<section>
+  <h1>Metrics and comparators</h1>
+  Expected Opportunity Cost: difference in value between an oracle and the policy (offline rewards)
+  <div class="small">\begin{equation*}
+    \EOC^{\pi}(\c;T) \defined \E^{\pi}\left[ \max_{\Wgen\in\Wset}(\Wgen\kron\Xpostt{1})\c - (\fadopt{\ct{T+\delay}}(\Xpostt{1})\kron\Xpostt{1})\c \mid \c \right]
+  \end{equation*}</div>
+
+  Cumulative regret: cumulative value difference between an oracle and the policy (online rewards)
+  <div class="small">\begin{equation*}
+    \textup{cum. regret}^{\pi}(\c;T) \defined \sum_{t+1}^{T} \E^{\pi}\left[ \max_{\Wgen\in\Wset}(\Wgen\kron\Xt{1})\c - (\fadopt{\ct{T+\delay}}(\Xt{t})\kron\Xpostt{1})\c \mid \c \right]
+  \end{equation*}</div>
+
+  <div class="fragment">
+    Comparator policies:
+    <ul>
+      <li> Thompson sampling <a data-citep="true" data-cite="Thompson1933" class="citation-intext" href="#/bibliography">(Thompson, 1933)</a>
+, Top-two Thompson sampling <a data-citep="true" data-cite="Russo2020simple" class="citation-intext" href="#/bibliography">(Russo, 2020)</a>
+ </li>
+      <li> BC* (adaptation of Biased Coin scheme, <a data-citealt="true" data-cite="Pocock1975" class="citation-intext" href="#/bibliography">Pocock &amp; Simon, 1975</a>
+) </li>
+      <li> RABC (Response Adaptive Biased Coin, <a data-citep="true" data-cite="zhao2022" class="citation-intext" href="#/bibliography">(Zhao et al., 2022)</a>
+) </li>
+      <li> Random</li>
+    </ul>
+  </div>
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<section>
+  <h1>Performance of <i>f</i>EVI and <i>f</i>EVI<sup>on</sup></h1>
+<div style="display:flex; gap:3%">
+<div class="column" style="width:50%">
+    <figure>
+      <img class="centerimg" style="width: 100%;" src="MARS_known_regret_off.svg">
+      <figcaption> Offline rewards </figcaption>
+    </figure>
+
+</div>
+<div class="column" style="width:50%">
+    <figure class="fragment">
+      <img class="centerimg" style="width: 100%;" src="MARS_cumulregret_on.svg">
+      <figcaption> Online rewards </figcaption>
+    </figure>
+
+</div>
+
+</div>
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<section>
+  <h1>Online rewards zoomed in</h1>
+  <img class="centerimg" style="width: 50%;" src="MARS_subset_cumulregret_on.svg">
+</section>
+
+<section>
+  <h1>Inference of labeling</h1>
+<div style="display:flex; gap:3%">
+<div class="column" style="width:50%">
+      <ul class="itemize">
+        <li> Instead of fixing a labeling based on medical expertise, use the available data to learn it </li>
+        <li> Use Lasso every few iterations to learn which labels are inactive </li>
+        <li> Select the penalty factor using cross-validation </li>
+      </ul>
+
+      <div class="fragment">
+        Labelings
+        <ul>
+          <li> all-pred: all covariates are predictive </li>
+          <li> all-prog: all covariates are prognostic </li>
+          <li> known: labeling is known </li>
+          <li> Lasso(min): cross-validation minimizes error
+          </li><li> Lasso(-1se): cross-validation is within 1se of the minimum error
+        </li></ul>
+      </div>
+
+</div>
+<div class="column" style="width:50%">
+      <figure class="fragment">
+        <img class="centerimg" style="width: 100%" src="MARS_dynamic_regret_off.svg">
+      <figure>
+
+</figure></figure></div>
+
+</div>
+</section>
+
+<section>
+  <h1>Inference of labeling (continued)</h1>
+  <ul class="itemize">
+    <li> Another application with dozens of covariates </li>
+    <li> Based on clinical data reported by <a data-citet="true" data-cite="Lipkovich2017" class="citation-intext" href="#/bibliography">Lipkovich et al. (2017)</a>
+ </li>
+  </ul>
+  <img class="centerimg" style="width: 50%" src="Lipkovich_dynamic_regret_off.svg">
+</section>
+
+<div data-title="Discussion and Conclusions"></div>
+<section>
+  <h1>Summary</h1>
+  Key take-away
+  <ul>
+    <li>Theoretical and computational results: there is benefit to <em class="emph">adaptive contextual learning</em> with <em class="emph">EVI-based approach</em> in settings with <em>predictive and prognostic covariates</em> </li>
+  </ul>
+  Extensions: additional conceptual and practical considerations<br>
+  <ul>
+    <li> <b> Online rewards </b> </li>
+    <li> <b> Inference of labeling if unknown </b></li>
+    <li> Adaptive stopping times </li>
+    <li> Dynamic enrollment decisions </li>
+    <li> Heteroskedastic or unknown patient outcome variance; 0-1 outcomes; surrogate measures (available before final primary outcome); fixed patent protection period </li>
+  </ul>
+  <aside class="notes">Write your notes here</aside>
+</section>
+
+<div data-title=""></div>
+<section>
+  <h1>Questions/Comments</h1>
+</section>
+
+<section id="bibliography" data-bibfile="biblio.bib" data-bibstyle="apa7" data-perpage="5">
+<section class="bibliography-section"><h1>References</h1><div class="bibliography-entry">  <div data-csl-entry-id="barker2009spy" class="csl-entry">Barker, A., Sigman, C., Kelloff, G., Hylton, N., Berry, D., &amp; Esserman, Lj. (2009). I-SPY 2: an adaptive breast cancer trial design in the setting of neoadjuvant chemotherapy. <i>Clin. Pharm. &amp; Therapeutics</i>, <i>86</i>(1), 97–100.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Bastani2020" class="csl-entry">Bastani, H., &amp; Bayati, M. (2020). Online Decision Making with High-Dimensional Covariates. <i>Operations Research</i>, <i>68</i>(1), 276–294.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="berry2011optadaptonc" class="csl-entry">Berry, D. A. (2011). Adaptive clinical trials in oncology. <i>Nat Rev Clinical Oncology</i>, <i>9</i>(4), 199–207.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="bertsimas2019covariate" class="csl-entry">Bertsimas, D., Korolko, N., &amp; Weinstein, A. M. (2019). Covariate-adaptive optimization in online clinical trials. <i>Operations Research</i>, <i>67</i>(4), 1150–1161.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Bhat2017" class="csl-entry">Bhat, N., Farias, V. F., Moallemi, C. C., &amp; Sinha, D. (2020). Near-Optimal A-B Testing. <i>Management Science</i>, <i>66</i>(10), 4477–4495.</div>
+</div></section><section class="bibliography-section"><h1>References</h1><div class="bibliography-entry">  <div data-csl-entry-id="Chick2001" class="csl-entry">Chick, S. E., &amp; Inoue, K. (2001). New two-stage and sequential procedures for selecting the best simulated system. <i>Operations Research</i>, <i>49</i>(5), 732–743.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Zhang2019" class="csl-entry">Ding, L., Hong, L. J., Shen, H., &amp; Zhang, X. (2021). Technical note – Knowledge Gradient for Selection with Covariates: Consistency and Computation. <i>Naval Research Logistics</i>, <i>69</i>(3), 496–507.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Foster2011" class="csl-entry">Foster, J. C., Taylor, J. M. G., &amp; Ruberg, S. J. (2011). Subgroup identification from randomized clinical trial data. <i>Statistics in Medicine</i>, <i>30</i>(24), 2867–2880.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Frazier2008" class="csl-entry">Frazier, P. I., Powell, W. B., &amp; Dayanik, S. (2008). A knowledge-gradient policy for sequential information collection. <i>SIAM Journal on Control and Optimization</i>, <i>47</i>(5), 2410–2439.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="gao2019selecting" class="csl-entry">Gao, S., Du, J., &amp; Chen, C.-H. (2019). Selecting the optimal system design under covariates. <i>IEEE 15th International Conference on Automation Science and Engineering (CASE)</i>, 547–552.</div>
+</div></section><section class="bibliography-section"><h1>References</h1><div class="bibliography-entry">  <div data-csl-entry-id="Goldenshluger2013" class="csl-entry">Goldenshluger, A., &amp; Zeevi, A. (2013). A linear response bandit problem. <i>Stochastic Systems</i>, <i>3</i>(1), 230–261.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Kim2006" class="csl-entry">Kim, S. H., &amp; Nelson, B. L. (2006). Selecting the Best System. In S. G. Henderson &amp; B. L. Nelson (Eds.), <i>Handbooks in Operations Research and Management Science</i>. Elsevier.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="li2020context" class="csl-entry">Li, H., Lam, H., Liang, Z., &amp; Peng, Y. (2020). Context-Dependent Ranking and Selection Under a Bayesian Framework. In K.-H. Bae, B. Feng, S. Kim, S. Lazarova-Molnar, Z. Zheng, T. Roeder, &amp; R. Thiesing (Eds.), <i>Proc.\ 2020 Winter Simulation Conference</i> (pp. 2060–2070). IEEE, Inc.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Lipkovich2017" class="csl-entry">Lipkovich, I., Dmitrienko, A., &amp; D’Agostino Sr, R. B. (2017). Tutorial in biostatistics: data-driven subgroup identification and analysis in clinical trials. <i>Statistics in Medicine</i>, <i>36</i>(1), 136–196.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="pearce2017efficient" class="csl-entry">Pearce, M., &amp; Branke, J. (2017). Efficient expected improvement estimation for continuous multiple ranking and selection. <i>Proc.\ 2017 Winter Simulation Conference</i>, 2161–2172.</div>
+</div></section><section class="bibliography-section"><h1>References</h1><div class="bibliography-entry">  <div data-csl-entry-id="Pocock1975" class="csl-entry">Pocock, S. J., &amp; Simon, R. (1975). Sequential Treatment Assignment with Balancing for Prognostic Factors in the Controlled Clinical Trial. <i>Biometrics</i>, <i>31</i>, 103–115.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="powell2012optimal" class="csl-entry">Powell, W. B., &amp; Ryzhov, I. O. (2012). <i>Optimal learning</i>. John Wiley &amp; Sons.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Rhodes2017" class="csl-entry">Rhodes, A., Evans, L. E., Alhazzani, W., Levy, M. M., Antonelli, M., Ferrer, R., Kumar, A., Sevransky, J. E., Sprung, C. L., Nunnally, M. E., Rochwerg, B., Rubenfeld, G. D., Angus, D. C., Annane, D., Beale, R. J., Bellinghan, G. J., Bernard, G. R., Chiche, J. D., Coopersmith, C., … Dellinger, R. P. (2017). Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock: 2016. <i>Critical Care Medicine</i>, <i>45</i>(3), 486–552.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Russo2020simple" class="csl-entry">Russo, D. (2020). Simple Bayesian Algorithms for Best Arm Identification. <i>Operations Research</i>, <i>68</i>(6), 1625–1931.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Russo2014learningposterior" class="csl-entry">Russo, D., &amp; Van Roy, B. (2014). Learning to Optimize Via Posterior Sampling. <i>Mathematics of Operations Research</i>, <i>68</i>(4), 1221–1243.</div>
+</div></section><section class="bibliography-section"><h1>References</h1><div class="bibliography-entry">  <div data-csl-entry-id="Singer2016" class="csl-entry">Singer, M., Deutschman, C. S., Seymour, C., Shankar-Hari, M., Annane, D., Bauer, M., Bellomo, R., Bernard, G. R., Chiche, J. D., Coopersmith, C. M., Hotchkiss, R. S., Levy, M. M., Marshall, J. C., Martin, G. S., Opal, S. M., Rubenfeld, G. D., Poll, T. D., Vincent, J. L., &amp; Angus, D. C. (2016). The third international consensus definitions for sepsis and septic shock (sepsis-3). <i>JAMA - Journal of the American Medical Association</i>, <i>315</i>(8), 801–810. https://doi.org/10.1001/jama.2016.0287</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Thompson1933" class="csl-entry">Thompson, W. R. (1933). On the Likelihood that One Unknown Probability Exceeds Another in View of the Evidence of Two Samples. <i>Biometrika</i>, <i>25</i>(3/4), 285–294. http://www.jstor.org/stable/2332286</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="Villar2018" class="csl-entry">Villar, S. S., &amp; Rosenberger, W. F. (2018). Covariate-adjusted response-adaptive randomization for multi-arm clinical trials using a modified forward looking Gittins index rule. <i>Biometrics</i>, <i>74</i>(1), 49–57.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="xiong2020personalized" class="csl-entry">Xiong, S. (2020). Personalized optimization and its implementation in computer experiments. <i>IISE Transactions</i>, <i>52</i>(5), 528–536.</div>
+</div><div class="bibliography-entry">  <div data-csl-entry-id="zhao2022" class="csl-entry">Zhao, W., Ma, W., Wang, F., &amp; Hu, F. (2022). Incorporating covariates information in adaptive clinical trials for precision medicine. <i>Pharmaceutical Statistics</i>, <i>21</i>(1), 176–195.</div>
+</div></section><section class="bibliography-section"><h1>References</h1><div class="bibliography-entry">  <div data-csl-entry-id="Zhou2008" class="csl-entry">Zhou, X., Liu, S., Kim, E. S., Herbst, R. S., &amp; Lee, J. J. J. (2008). Bayesian adaptive design for targeted therapy development in lung cancer - A step toward personalized medicine. <i>Clinical Trials</i>, <i>5</i>(3), 181–193.</div>
+</div></section></section>
+
+
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^4/dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@^4/plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4/plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4/plugin/zoom/zoom.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4/plugin/math/math.js"></script>
+
+  <script>
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      let config = {"controls":false,"progress":false,"hash":true,"navigationMode":"default","center":false,"width":1280,"height":720,"controlsTutorial":false,"fragments":true,"slideNumber":false};
+      // reveal.js plugins
+      config["plugins"] = config["plugins"] || [];
+      config["plugins"] = config["plugins"].concat([
+        RevealNotes,
+        RevealSearch,
+        RevealZoom,
+        RevealMath.MathJax3
+      ]);
+
+      Reveal.initialize(
+        config
+      );
+    </script>
+  
+
+
+
+
+</body></html>
