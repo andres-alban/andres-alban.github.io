@@ -2,14 +2,12 @@
 <html>
 <head>
 
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-1ZK8W566DD"></script>
 	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-
-		gtag('config', 'G-1ZK8W566DD');
+		!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+		posthog.init('phc_3fjwH0I4fmjqSKl3DHldxLK4OqcLD9gU7LkV7odfEmO', {
+			api_host:'https://eu.i.posthog.com',
+			persistence: 'memory',
+		})
 	</script>
 
 
@@ -31,7 +29,7 @@
 			<h3>Research Interests</h3>
 			<p>
 				My research interests lie broadly in the application of simulation, optimization, and data analysis to support health care decision-making.
-				I am currently interested in efficient learning in clinical trials, precision medicine, screening and treatment of cancer (thyroid and lung), and health care in the intensive care unit (ICU).
+				I am currently interested in efficient learning in clinical trials, precision medicine, and health care in the intensive care unit (ICU).
 			</p>
 			<h3>Published Work</h3>
 			<ul>
@@ -47,11 +45,6 @@
 			<h3>Working Papers</h3>
 			<ul>
 				<li><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4160045" class="paper" target="_blank">Learning Personalized Treatment Strategies with Predictive and Prognostic Covariates in Adaptive Clinical Trials</a> with Stephen E. Chick and Spyros I. Zoumpoulis</li>
-			</ul>
-			<h3>Work in progress</h3>
-			<ul>
-				<li><i>The Cost of Early Diagnosis of Thyroid Carcinoma with Calcitonin Tests</i> with Reagan A. Collins, Tianna Herman, Jaber Valinejad, Mohammad S. Jalali, G. Scott Gazelle, Jagpreet Chhatwal, Carrie Lubitz</li>
-				<li><i>Blood Transcriptomic Endotypes and the Response to Treatment Modalities in Sepsis: A Prospective Cohort Study</i> with Niels van Mourik, Fabrice Uhel, Alexander Vlaar, Spyros I. Zoumpoulis, Stephen E. Chick, Brendon Scicluna</li>
 			</ul>
 			<h3>Conference Proceedings</h3>
 			<ul>
